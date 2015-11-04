@@ -57,11 +57,12 @@
 
     componentDidUpdate: function (prevProps) {
       // Update if children have changed 
-      if (this.props.children.length !== prevProps.children.length) {
-        this.swipe.setup();
-      }
       if (this.props.slideToIndex || this.props.slideToIndex === 0) {
         this.swipe.slide(this.props.slideToIndex);
+      }
+      if (prevProps.children.length != this.props.children.length ||
+          prevProps.children[0].key != this.props.children[0].key) {
+        this.swipe.setup();
       }
     },
 
@@ -72,8 +73,9 @@
 
     shouldComponentUpdate: function (nextProps) {
       return (
-        // Check if children have changed
-        (this.props.slideToIndex !== nextProps.slideToIndex) || this.props.children.length !== nextProps.children.length ||
+        (this.props.slideToIndex !== nextProps.slideToIndex)
+        || this.props.children.length != nextProps.children.length ||
+          this.props.children[0].key != nextProps.children[0].key ||
         (typeof this.props.shouldUpdate !== 'undefined') && this.props.shouldUpdate(nextProps)
       );
     },
