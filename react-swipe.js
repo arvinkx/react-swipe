@@ -19,7 +19,8 @@
     container: {
       overflow: 'hidden',
       visibility: 'hidden',
-      position: 'relative'
+      position: 'relative',
+      width: '100%' // display issues in IE when missing
     },
 
     wrapper: {
@@ -66,8 +67,13 @@
     },
 
     shouldComponentUpdate: function (nextProps) {
+      // Update if children have changed 
+      if (this.props.children !== nextProps.children) {
+        this.swipe = Swipe(React.findDOMNode(this), this.props);
+      }
       return (
-        (this.props.slideToIndex !== nextProps.slideToIndex) ||
+        // Check if children have changed
+        (this.props.slideToIndex !== nextProps.slideToIndex) || this.props.children !== nextProps.children ||
         (typeof this.props.shouldUpdate !== 'undefined') && this.props.shouldUpdate(nextProps)
       );
     },
