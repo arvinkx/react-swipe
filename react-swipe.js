@@ -55,7 +55,11 @@
       this.swipe = Swipe(ReactDOM.findDOMNode(this), objectAssign({}, this.props));
     },
 
-    componentDidUpdate: function () {
+    componentDidUpdate: function (prevProps) {
+      // Update if children have changed 
+      if (this.props.children.length !== prevProps.children.length) {
+        this.swipe.setup();
+      }
       if (this.props.slideToIndex || this.props.slideToIndex === 0) {
         this.swipe.slide(this.props.slideToIndex);
       }
@@ -67,13 +71,9 @@
     },
 
     shouldComponentUpdate: function (nextProps) {
-      // Update if children have changed 
-      if (this.props.children !== nextProps.children) {
-        this.swipe = Swipe(React.findDOMNode(this), this.props);
-      }
       return (
         // Check if children have changed
-        (this.props.slideToIndex !== nextProps.slideToIndex) || this.props.children !== nextProps.children ||
+        (this.props.slideToIndex !== nextProps.slideToIndex) || this.props.children.length !== nextProps.children.length ||
         (typeof this.props.shouldUpdate !== 'undefined') && this.props.shouldUpdate(nextProps)
       );
     },
